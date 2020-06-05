@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>image/monster1.png</file>
+        <file>image/草地块.png</file>
+        <file>image/地面.png</file>
+        <file>image/石砖块.png</file>
+        <file>image/房子.png</file>
+    </qresource>
+</RCC>

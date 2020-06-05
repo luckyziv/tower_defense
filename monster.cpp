@@ -56,7 +56,9 @@ QString Monster::getImgPath() const
 
 bool Monster::move()
 {
-#if 0
+    if (pathPointsArr.isEmpty())
+        return false;
+
     // down
     if (pathPointsArr.at(0)->y > monsterY){
         monsterY += monsterSpeed;
@@ -80,6 +82,10 @@ bool Monster::move()
         monsterY -= monsterSpeed;
         return true;
     }
-#endif
+
+    if ((pathPointsArr.at(0)->x == monsterX) || (pathPointsArr.at(0)->y == monsterY)) {
+        pathPointsArr.erase(pathPointsArr.begin());
+        return true;
+    }
 }
 

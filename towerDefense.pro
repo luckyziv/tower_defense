@@ -25,11 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    tower.cpp \
         widget.cpp \
     game.cpp \
     monster.cpp
 
 HEADERS += \
+    tower.h \
         widget.h \
     game.h \
     monster.h \

@@ -2,8 +2,10 @@
 #include <QDebug>
 #include <QLabel>
 #include <QTimer>
+
 #include "global.h"
 #include "monster.h"
+#include "tower.h"
 
 #define X40(num)    (((num) - 1) * 40 + 10)
 
@@ -48,7 +50,9 @@ game::game(int level)
                 new coorStr(X40(2), X40(6)),
                 new coorStr(X40(2), X40(13)),
                 new coorStr(X40(19), X40(13)),
-                new coorStr(X40(19), X40(9))
+                new coorStr(X40(19), X40(9)),
+
+                new coorStr(X40(26), X40(9))    // home
             };
             coorStr *wayPointArr2[] = {
                 new coorStr(X40(20), X40(6)),
@@ -59,7 +63,9 @@ game::game(int level)
                 new coorStr(X40(20), X40(6)),
                 new coorStr(X40(14), X40(6)),
                 new coorStr(X40(14), X40(13)),
-                new coorStr(X40(8), X40(13))
+                new coorStr(X40(8), X40(13)),
+
+                new coorStr(X40(26), X40(9))    // home
             };
 
             // path monster start point
@@ -84,14 +90,14 @@ game::game(int level)
     QTimer *timer1 = new QTimer(this);
     timer1->start(120);
     connect(timer1, &QTimer::timeout, [=]() {
+        qDebug() << "timer1";
         // monsterVec.begin(): return the 1st argument memory address
-        for (auto monster = monsterVec.begin(); monsterVec.end(); monster++){
+        for (auto monster = monsterVec.begin(); monster != monsterVec.end(); monster++){
             (*monster)->move();
+            update();   // important
         }
 
     });
-
-    update();   // important
 
 }
 
@@ -108,27 +114,29 @@ void game::paintEvent(QPaintEvent *event)
 
     // draw map
     drawMapArr(painter);
+    // draw monster
+    drawMonster(painter);
 }
 
 void game::drawMapArr(QPainter &painter)
 {
     int Map_1[16][26] = {
         0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 1, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 1, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 2, 8, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 8, 8, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 8, 0, 0, 2, 8, 1, 1, 2, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8, 0, 0, 8, 8, 1, 1, 8, 8, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 0, 0, 2, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 0, 0, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 1, 1, 2, 8, 0, 0, 0, 0, 2, 8, 0, 0, 0, 0, 2, 8, 0, 0, 0, 1, 1, 1, 1, 9, 8,
-        0, 1, 1, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 8, 8, 0, 0, 0, 1, 1, 1, 1, 8, 8,
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 1, 3, 6, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 1, 1, 6, 6, 0, 0, 0, 0, 0, 0, 3, 6, 1, 1, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 3, 6, 1, 1, 3, 6, 0, 0, 0, 0, 0, 0, 6, 6, 1, 1, 3, 6, 0, 0, 0,
+        0, 0, 0, 0, 0, 6, 6, 1, 1, 6, 6, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 3, 6, 0, 1, 1, 0, 0, 0, 0, 3, 6, 0, 0, 0, 0, 0,
+        0, 1, 1, 0, 3, 6, 0, 1, 1, 0, 6, 6, 0, 1, 1, 0, 3, 6, 0, 6, 6, 0, 0, 0, 0, 0,
+        0, 1, 1, 0, 6, 6, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 6, 6, 1, 1, 1, 1, 1, 1, 5, 6,
+        0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 6, 6,
+        0, 1, 1, 0, 3, 6, 0, 0, 3, 6, 0, 0, 3, 6, 0, 0, 3, 6, 1, 1, 3, 6, 0, 0, 0, 0,
+        0, 1, 1, 0, 6, 6, 0, 0, 6, 6, 0, 0, 6, 6, 0, 0, 6, 6, 1, 1, 6, 6, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
 
     int Map_2[16][26] = {
@@ -191,15 +199,16 @@ void game::drawMapArr(QPainter &painter)
                 painter.drawPixmap(j * 40, i * 40, 40, 40,
                                    QPixmap(":/new/prefix1/image/草地块.png"));
                 break;
-            case 1:
+            case 1: // monster path
                 painter.drawPixmap(j * 40, i * 40, 40, 40,
                                    QPixmap(":/new/prefix1/image/地面.png"));
                 break;
-            case 2:
+            case 3: // tower position
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
                                    QPixmap(":/new/prefix1/image/石砖块.png"));
+                towerVec.push_back(new Tower(i * 40, i * 40));
                 break;
-            case 9:
+            case 5: // home
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
                                    QPixmap(":/new/prefix1/image/房子.png"));
                 break;
@@ -224,7 +233,7 @@ void game::getNewMonsterAndPathInfo(coorStr **wayPointArr1, coorStr **wayPointAr
     coorStr **wayPointsArr[] = {wayPointArr1, wayPointArr2};   // two path points
 
     if ((monsterCounter >= 1) && (monsterCounter <= 14)) {
-        insertOneMonster(0, 0, 1);
+        insertOneMonster(0, 0, 0);
     } else if ((monsterCounter >= 14) && ( monsterCounter < 28)) {
 
     }

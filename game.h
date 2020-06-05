@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QLabel>
+
+#include "tower.h"
 #include "global.h"
 #include "monster.h"
 
@@ -20,6 +22,7 @@ protected:
 private:
     QVector<coorStr *> wayPoint;
     QVector<Monster *> monsterVec;
+    QVector<Tower *>   towerVec;
 
 
     void drawMapArr(QPainter &painter);

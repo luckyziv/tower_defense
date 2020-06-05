@@ -197,20 +197,20 @@ void game::drawMapArr(QPainter &painter)
             switch (Map[i][j]) {
             case 0:
                 painter.drawPixmap(j * 40, i * 40, 40, 40,
-                                   QPixmap(":/new/prefix1/image/草地块.png"));
+                                   QPixmap(":/new/prefix1/image/grass_block.png"));
                 break;
             case 1: // monster path
                 painter.drawPixmap(j * 40, i * 40, 40, 40,
-                                   QPixmap(":/new/prefix1/image/地面.png"));
+                                   QPixmap(":/new/prefix1/image/path_block.png"));
                 break;
             case 3: // tower position
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
-                                   QPixmap(":/new/prefix1/image/石砖块.png"));
-                towerVec.push_back(new Tower(i * 40, i * 40));
+                                   QPixmap(":/new/prefix1/image/tower_block.png"));
+                towerVec.push_back(new Tower(i * 40, i * 40, 80, 80));
                 break;
             case 5: // home
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
-                                   QPixmap(":/new/prefix1/image/房子.png"));
+                                   QPixmap(":/new/prefix1/image/home.png"));
                 break;
             default:
                 break;

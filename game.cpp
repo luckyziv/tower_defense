@@ -250,13 +250,19 @@ void game::drawMonster(QPainter &painter)
 void game::drawSelectBox(QPainter &painter)
 {
     qDebug() << "draw select box!";
+    // draw select box
     painter.drawPixmap(selectBox->getX(), selectBox->getY(), \
                        selectBox->getWidth(), selectBox->getHeight(), QPixmap(selectBox->getImgPaht()));
 
+    // draw sub box
     for (int i = 0; i < 4; i++) {
         painter.drawPixmap(selectBox->subBox[i].x, selectBox->subBox[i].y, \
                            selectBox->subBox[i].width, selectBox->subBox[i].height, QPixmap(selectBox->subBox[i].imgPath));
     }
+
+    // draw rect
+    painter.setPen(QPen(Qt::yellow, 6, Qt::SolidLine));
+    painter.drawRect(QRect(selectBox->subBox[0].x - 10, selectBox->subBox[0].y + 70, 80, 80));
 }
 
 // insert monster

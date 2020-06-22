@@ -55,16 +55,16 @@ void SelectBox::setBoxAndSubPos(int x, int y)
     subBox[0].y = y - 70;
     subBox[0].imgPath = ":/new/prefix1/image/arms1.png";
 
-    subBox[1].x = selectX + 30;
-    subBox[1].y = selectY + 60;
+    subBox[1].x = x - 70;
+    subBox[1].y = y + 10;
     subBox[1].imgPath = ":/new/prefix1/image/arms2.png";
 
     subBox[2].x = x + 10;
-    subBox[2].y = y + 80;
+    subBox[2].y = y + 85;
     subBox[2].imgPath = ":/new/prefix1/image/buy_fire.png";
 
-    subBox[3].x = selectX + 120;
-    subBox[3].y = selectY + 60;
+    subBox[3].x = x + 100;
+    subBox[3].y = y + 10;
     subBox[3].imgPath = ":/new/prefix1/image/buy_green.png";
 
     setFlag = true;

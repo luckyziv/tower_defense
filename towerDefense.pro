@@ -25,12 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    selectbox.cpp \
     tower.cpp \
         widget.cpp \
     game.cpp \
     monster.cpp
 
 HEADERS += \
+    selectbox.h \
     tower.h \
         widget.h \
     game.h \
@@ -42,4 +44,5 @@ FORMS += \
 
 RESOURCES += \
     image.qrc
+
 

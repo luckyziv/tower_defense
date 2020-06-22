@@ -85,6 +85,12 @@ bool Monster::move()
 
     if ((pathPointsArr.at(0)->x == monsterX) || (pathPointsArr.at(0)->y == monsterY)) {
         pathPointsArr.erase(pathPointsArr.begin());
+
+        // if monster arrive home, let it hide by home.png
+        if (pathPointsArr.isEmpty()) {
+            imgPath = ":/image/home.png";
+        }
+
         return true;
     }
 }

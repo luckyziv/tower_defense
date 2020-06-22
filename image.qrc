@@ -1,10 +1,16 @@
 <RCC>
     <qresource prefix="/new/prefix1">
         <file>image/grass_block.png</file>
+        <file>image/home.png</file>
         <file>image/monster1.png</file>
         <file>image/path_block.png</file>
         <file>image/tower_block.png</file>
         <file>image/tower1.png</file>
-        <file>image/home.png</file>
+        <file>image/select_box.png</file>
+        <file>game.cpp</file>
+        <file>image/buy_green.png</file>
+        <file>image/buy_fire.png</file>
+        <file>image/arms1.png</file>
+        <file>image/arms2.png</file>
     </qresource>
 </RCC>

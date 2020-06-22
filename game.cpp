@@ -17,6 +17,10 @@
 #define insertOneMonster(pathNum, staCoorNum, monsterId)   \
 monsterVec.push_back(new Monster(wayPointsArr[pathNum], pathLength[pathNum], X40(staco[staCoorNum].x), X40(staco[staCoorNum].y), monsterId));
 
+// must X/Y
+#define mouseClickIsInRegion(X, width, Y, height)   \
+((event->x() >= (X)) && (event->x() <= ((X) + (width)))) &&   \
+((event->y() >= (Y)) && (event->y() <= ((Y) + (height))))
 
 game::game(int level)
 {
@@ -36,7 +40,9 @@ game::game(int level)
     victoryNote->setText(QString("游戏胜利！"));
     victoryNote->hide();
 
-    // This timer do update monsters, 1 monster/2s
+    selectBox = new SelectBox(":/new/prefix1/image/select_box.png");
+
+    // timer: add monsters, 1 monster/2s
     QTimer *timer = new QTimer(this);
     timer->start(2000);
     connect(timer, &QTimer::timeout, [=]() {
@@ -84,20 +90,21 @@ game::game(int level)
             break;
         };
     });
-
+    // add monsters end
 
     // monster move
     QTimer *timer1 = new QTimer(this);
     timer1->start(120);
     connect(timer1, &QTimer::timeout, [=]() {
-        qDebug() << "timer1";
+        //qDebug() << "timer1";
         // monsterVec.begin(): return the 1st argument memory address
         for (auto monster = monsterVec.begin(); monster != monsterVec.end(); monster++){
             (*monster)->move();
-            update();   // important
+            update();
         }
 
     });
+    // monster move end
 
 }
 
@@ -116,6 +123,20 @@ void game::paintEvent(QPaintEvent *event)
     drawMapArr(painter);
     // draw monster
     drawMonster(painter);
+    // draw tower
+    drawSelectBox(painter);
+}
+
+void game::mousePressEvent(QMouseEvent *event)
+{
+//  qDebug() << "mouse press coordinate: " << event->x() << event->y();
+    for (auto towerbase = towerPosVec.begin(); towerbase != towerPosVec.end(); towerbase++) {
+        if (mouseClickIsInRegion((*towerbase)->getX(), (*towerbase)->getWidth(), (*towerbase)->getY(), (*towerbase)->getHeight())) {
+            qDebug() << "mouse click in region: " << (*towerbase)->getX() << (*towerbase)->getY();
+            selectBox->setBoxAndSubPos((*towerbase)->getX(), (*towerbase)->getY());
+            update();   //to draw selectBox
+        }
+    }
 }
 
 void game::drawMapArr(QPainter &painter)
@@ -195,7 +216,7 @@ void game::drawMapArr(QPainter &painter)
     for (int i = 0; i < 16; i++) {
         for (int j = 0; j < 26; j++) {
             switch (Map[i][j]) {
-            case 0:
+            case 0: // grass
                 painter.drawPixmap(j * 40, i * 40, 40, 40,
                                    QPixmap(":/new/prefix1/image/grass_block.png"));
                 break;
@@ -206,7 +227,7 @@ void game::drawMapArr(QPainter &painter)
             case 3: // tower position
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
                                    QPixmap(":/new/prefix1/image/tower_block.png"));
-                towerVec.push_back(new Tower(i * 40, i * 40, 80, 80));
+                towerPosVec.push_back(new Tower(j * 40, i * 40, 80, 80));  // record base of defense tower
                 break;
             case 5: // home
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
@@ -217,7 +238,6 @@ void game::drawMapArr(QPainter &painter)
             };
         }
     }
-
 }
 
 void game::drawMonster(QPainter &painter)
@@ -225,6 +245,18 @@ void game::drawMonster(QPainter &painter)
     for (auto moni : monsterVec)
         painter.drawPixmap(moni->getX(), moni->getY(), moni->getWidth(), moni->getHeight(), QPixmap(moni->getImgPath()));
 
+}
+
+void game::drawSelectBox(QPainter &painter)
+{
+    qDebug() << "draw select box!";
+    painter.drawPixmap(selectBox->getX(), selectBox->getY(), \
+                       selectBox->getWidth(), selectBox->getHeight(), QPixmap(selectBox->getImgPaht()));
+
+    for (int i = 0; i < 4; i++) {
+        painter.drawPixmap(selectBox->subBox[i].x, selectBox->subBox[i].y, \
+                           selectBox->subBox[i].width, selectBox->subBox[i].height, QPixmap(selectBox->subBox[i].imgPath));
+    }
 }
 
 // insert monster
@@ -237,8 +269,6 @@ void game::getNewMonsterAndPathInfo(coorStr **wayPointArr1, coorStr **wayPointAr
     } else if ((monsterCounter >= 14) && ( monsterCounter < 28)) {
 
     }
-
-
 
     monsterCounter++;
 }

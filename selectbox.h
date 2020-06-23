@@ -23,6 +23,7 @@ public:
     void settingFlag(bool flag);
     bool getSettingFlag(void);
     void setBoxAndSubPos(int x, int y);
+    subBoxInfo* getSubBoxInfo(void);
 
     subBoxInfo subBox[4];
 private:

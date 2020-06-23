@@ -24,10 +24,14 @@ protected:
     void mousePressEvent(QMouseEvent *event);
 
 private:
+    int levelNumber;
+    int monsterCounter;
+    int money;
+    QLabel *victoryNoteLable;
+    QLabel *showMoneyLable;
     QVector<coorStr *> wayPoint;
     QVector<Monster *> monsterVec;
     QVector<Tower *>   towerPosVec;
-
     SelectBox *selectBox = NULL;
 
     void drawMapArr(QPainter &painter);
@@ -35,9 +39,7 @@ private:
     void drawSelectBox(QPainter &painter);
     void getNewMonsterAndPathInfo(coorStr **wayPointArr1, coorStr **wayPointArr2,
                           coorStr *staco, int *pathLength, QLabel *victoryLable);
-    int levelNumber;
-    int monsterCounter;
-
+    inline bool decutionMoney(int cust);
 
 signals:
 

@@ -69,3 +69,8 @@ void SelectBox::setBoxAndSubPos(int x, int y)
 
     setFlag = true;
 }
+
+subBoxInfo *SelectBox::getSubBoxInfo()
+{
+    return subBox;
+}

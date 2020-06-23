@@ -31,14 +31,23 @@ game::game(int level)
     setFixedSize(1040, 640);
     setWindowTitle("Game Window");
 
+    money = 1000;
     levelNumber = level;
     monsterCounter = 0;
 
-    QLabel *victoryNote = new QLabel(this);
-    victoryNote->move(176, 180);
-    victoryNote->setFont(QFont("楷体", 110));
-    victoryNote->setText(QString("游戏胜利！"));
-    victoryNote->hide();
+    victoryNoteLable = new QLabel(this);
+    victoryNoteLable->move(176, 180);
+    victoryNoteLable->setFont(QFont("楷体", 110));
+    victoryNoteLable->setText(QString("游戏胜利！"));
+    victoryNoteLable->hide();
+
+    // money lable
+    showMoneyLable = new QLabel(this);
+    showMoneyLable->move(200, 200);
+    showMoneyLable->setFont(QFont("楷体", 110));
+    showMoneyLable->setText("金钱：1000");
+    showMoneyLable->show();
+
 
     selectBox = new SelectBox(":/new/prefix1/image/select_box.png");
 
@@ -129,12 +138,23 @@ void game::paintEvent(QPaintEvent *event)
 
 void game::mousePressEvent(QMouseEvent *event)
 {
-//  qDebug() << "mouse press coordinate: " << event->x() << event->y();
+    //  select box
     for (auto towerbase = towerPosVec.begin(); towerbase != towerPosVec.end(); towerbase++) {
         if (mouseClickIsInRegion((*towerbase)->getX(), (*towerbase)->getWidth(), (*towerbase)->getY(), (*towerbase)->getHeight())) {
             qDebug() << "mouse click in region: " << (*towerbase)->getX() << (*towerbase)->getY();
             selectBox->setBoxAndSubPos((*towerbase)->getX(), (*towerbase)->getY());
             update();   //to draw selectBox
+            return;
+        }
+    }
+
+    //  sub box
+    subBoxInfo *subInfo = selectBox->getSubBoxInfo();
+    for (int i = 0; i < 4; i++) {
+        if (mouseClickIsInRegion(subInfo[i].x,  subInfo[i].width, subInfo[i].y, subInfo[i].height)) {
+            switch (i) {
+
+            }
         }
     }
 }
@@ -277,4 +297,14 @@ void game::getNewMonsterAndPathInfo(coorStr **wayPointArr1, coorStr **wayPointAr
     }
 
     monsterCounter++;
+}
+
+inline bool game::decutionMoney(int cust)
+{
+    if ((money - cust) <= 0)
+        return true;
+    money -= cust;
+    showMoneyLable->setText(QString("金钱：%d").arg(money));
+
+    return false;
 }

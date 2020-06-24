@@ -1,0 +1,12 @@
+#ifndef FIRETOWER_H
+#define FIRETOWER_H
+#include "defendtower.h"
+
+
+class firetower : public defendTower
+{
+public:
+    firetower(int x, int y, int xx, int yy, int width = 80, int height = 80);
+};
+
+#endif // FIRETOWER_H

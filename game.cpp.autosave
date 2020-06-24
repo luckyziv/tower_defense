@@ -260,7 +260,7 @@ void game::drawMapArr(QPainter &painter)
             case 3: // tower position
                 painter.drawPixmap(j * 40, i * 40, 80, 80,
                                    QPixmap(":/new/prefix1/image/tower_block.png"));
-                towerPosVec.push_back(new Tower(j * 40, i * 40, 80, 80));  // record base of defense tower
+                towerPosVec.push_back(new Tower(j * 40, i * 40, 80, 80));  // record base of defense tower pos
                 break;
             case 5: // home
                 painter.drawPixmap(j * 40, i * 40, 80, 80,

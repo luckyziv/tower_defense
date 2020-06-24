@@ -15,6 +15,8 @@ private:
     int range = 0;
     QString baseImgPath;
     QString deTwrImgPath;
+    int towerPosX;
+    int towerPosY;
 
 public:
     defendTower();

@@ -24,7 +24,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    bigtower.cpp \
     defendtower.cpp \
+    firetower.cpp \
+    greentower.cpp \
+    lighttower.cpp \
         main.cpp \
     selectbox.cpp \
     tower.cpp \
@@ -33,7 +37,11 @@ SOURCES += \
     monster.cpp
 
 HEADERS += \
+    bigtower.h \
     defendtower.h \
+    firetower.h \
+    greentower.h \
+    lighttower.h \
     selectbox.h \
     tower.h \
         widget.h \
